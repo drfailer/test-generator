@@ -2,9 +2,6 @@
 #define TEST_GENERATOR_CHOLESKY_MATRIX_H
 
 #include <random>
-#include <ranges>
-#include <algorithm>
-#include <execution>
 #include <cblas.h>
 #include "../data/matrix.h"
 #include "../tools/metafunctions.h"
@@ -15,18 +12,8 @@ namespace tg::cholesky {
 /// @brief Compute A = L * LT
 template <typename T>
 void matrixDotProduct(Matrix<T> &L, Matrix<T> &A) {
-  auto idx = std::views::iota((size_t) 0, A.height());
-  std::for_each(std::execution::par, idx.begin(), idx.end(), [&](size_t i) {
-    for (size_t j = 0; j <= i; ++j) {
-      A.at(i, j) = 0;
-      for (size_t k = 0; k < L.height(); ++k) {
-        A.at(i, j) += L.at(i, k) * L.at(j, k);
-      }
-      A.at(j, i) = A.at(i, j);
-    }
-  });
-//  cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasTrans, A.width(), A.height(), L.height(), 1.0,
-//              L.get(), L.width(), L.get(), L.width(), 1.0, A.get(), A.width());
+  cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasTrans, A.width(), A.height(), L.height(), 1.0,
+              L.get(), L.width(), L.get(), L.width(), 1.0, A.get(), A.width());
 }
 
 /// @brief Generate a random lower triangular matrix and compute the product L*L**T.
