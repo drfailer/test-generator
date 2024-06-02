@@ -42,7 +42,9 @@ void generateRandomCholeskyMatrix(Matrix<T> &matrix, Matrix<T> &result, BT low, 
 
   for (size_t i = 0; i < matrix.height(); ++i) {
     for (size_t j = 0; j <= i; ++j) {
-      result.at(i, j) = dis(gen);
+      BT value = dis(gen);
+      if (value == 0 && i == j) value++;
+      result.at(i, j) = value;
     }
   }
   matrixDotProduct(result, matrix);
