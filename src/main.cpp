@@ -2,6 +2,7 @@
 #include "data/matrix.h"
 #include "tools/cli.h"
 #include "generators/cholesky_matrix.h"
+#include <cblas.h>
 
 void generate(Config const &config) {
   switch (config.generator) {
@@ -20,6 +21,7 @@ int main(int argc, char **argv) {
           .type = "int"
   };
   parseCmdArgs(argc, argv, config);
+  openblas_set_num_threads(40);
   generate(config);
   return 0;
 }

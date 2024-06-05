@@ -31,6 +31,7 @@ void generateRandomCholeskyMatrix(Matrix<T> &matrix, Matrix<T> &result, BT low, 
     for (size_t j = 0; j <= i; ++j) {
       BT value = dis(gen);
       if (value == 0 && i == j) value++;
+      /* if (value == 0) value++; */
       result.at(i, j) = value;
     }
   }
