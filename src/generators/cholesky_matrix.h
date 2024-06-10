@@ -44,7 +44,7 @@ void generate(Config const &config) {
   size_t height = config.size.second;
   Matrix<T> matrix(width, height);
   Matrix<T> result(width, height);
-  std::ofstream fs(config.filename);
+  std::ofstream fs(config.filename, std::ios::binary);
 
   // todo: the boundaries should be configurable
   generateRandomCholeskyMatrix<T, BT>(matrix, result, 0, 10);

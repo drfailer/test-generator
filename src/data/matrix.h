@@ -43,20 +43,22 @@ class Matrix {
   void load(std::ifstream &fs) {
     delete[] ptr_;
 
-    fs >> width_ >> height_; // width and height on first line
+    fs.read(reinterpret_cast<char*>(&width_), sizeof(width_));
+    fs.read(reinterpret_cast<char*>(&height_), sizeof(height_));
     ptr_ = new T[width_ * height_];
 
     for (size_t i = 0; i < width_ * height_; ++i) {
-      fs >> ptr_[i];
+      fs.read(reinterpret_cast<char*>(&ptr_ + i), sizeof(ptr_[i]));
     }
   }
 
-  void dump(std::ofstream &fs) const {
-    fs << width_ << " " << height_ << std::endl;
+  void dump(std::ofstream &fs) {
+    fs.write(reinterpret_cast<char*>(&width_), sizeof(width_));
+    fs.write(reinterpret_cast<char*>(&height_), sizeof(height_));
+
     for (size_t i = 0; i < width_ * height_; ++i) {
-      fs << ptr_[i] << " ";
+      fs.write(reinterpret_cast<char*>(ptr_ + i), sizeof(ptr_[i]));
     }
-    fs << std::endl;
   }
 
  private:
