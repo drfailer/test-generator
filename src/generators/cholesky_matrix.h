@@ -38,18 +38,47 @@ void generateRandomCholeskyMatrix(Matrix<T> &matrix, Matrix<T> &result, BT low, 
   matrixDotProduct(result, matrix);
 }
 
+/// @brief Generate a random vector and compute result: matrix.solution = result
+/// @param matrix Matrix containing the equation
+/// @param result Vector result of the equation
+/// @param solution Vector solution of the equation
+template <typename T, typename BT = long>
+void generateRandomEquationVector(Matrix<T> &matrix, Matrix<T> &result, Matrix<T> &solution, BT low, BT high) {
+  std::random_device dv;
+  std::mt19937 gen(dv());
+  mtf::distribution_type<BT> dis(low, high);
+
+  memset(result.get(), 0, sizeof(T) * result.height());
+
+  for (size_t i = 0; i < solution.height(); ++i) {
+    solution.at(i, 0) = dis(gen);
+  }
+  cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, result.height(), solution.width(),
+              matrix.width(), 1.0, matrix.get(), matrix.width(), solution.get(), solution.width(),
+              1.0, result.get(), result.width());
+}
+
 template <typename T, typename BT = long>
 void generate(Config const &config) {
   size_t width = config.size.first;
   size_t height = config.size.second;
   Matrix<T> matrix(width, height);
-  Matrix<T> result(width, height);
+  Matrix<T> triangular(width, height);
   std::ofstream fs(config.filename, std::ios::binary);
 
   // todo: the boundaries should be configurable
-  generateRandomCholeskyMatrix<T, BT>(matrix, result, 0, 10);
+  generateRandomCholeskyMatrix<T, BT>(matrix, triangular, 0, 10);
   matrix.dump(fs);
-  result.dump(fs);
+  triangular.dump(fs);
+
+  if (config.generator == CholeskyEquation) {
+    Matrix<T> result(1, height);
+    Matrix<T> solution(1, height);
+
+    generateRandomEquationVector(matrix, result, solution, 0, 10);
+    result.dump(fs);
+    solution.dump(fs);
+  }
 }
 
 }

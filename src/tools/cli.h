@@ -3,6 +3,7 @@
 
 enum Generators {
   CholeskyDecomposableMatrix,
+  CholeskyEquation,
 };
 
 struct Config {

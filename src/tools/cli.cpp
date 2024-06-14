@@ -33,6 +33,8 @@ Generators parseGenerator(std::string const &str) {
 
   if (str == "cholesky" || str == "CholeskyDecomposableMatrix") {
     result = CholeskyDecomposableMatrix;
+  } else if (str == "choleq" || str == "CholeskyEquation") {
+    result = CholeskyEquation;
   } else {
     throw std::invalid_argument("error: generator not found.");
   }

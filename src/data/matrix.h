@@ -61,6 +61,16 @@ class Matrix {
     }
   }
 
+  friend std::ostream &operator<<(std::ostream &os, Matrix<T> const &matrix) {
+    for (size_t i = 0; i < matrix.height_; ++i) {
+      for (size_t j = 0; j < matrix.width_; ++j) {
+        os << matrix.at(i, j) << " ";
+      }
+      os << std::endl;
+    }
+    return os;
+  }
+
  private:
   size_t width_ = 0;
   size_t height_ = 0;

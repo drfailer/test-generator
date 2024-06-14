@@ -7,6 +7,7 @@
 void generate(Config const &config) {
   switch (config.generator) {
     case CholeskyDecomposableMatrix:
+    case CholeskyEquation:
       // todo: boundaries type should be configurable
       tg::cholesky::generate<double, int>(config);
       break;
