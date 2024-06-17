@@ -76,6 +76,7 @@ void generate(Config const &config) {
     Matrix<T> solution(1, height);
 
     generateRandomEquationVector(matrix, result, solution, 0, 10);
+
     result.dump(fs);
     solution.dump(fs);
   }
