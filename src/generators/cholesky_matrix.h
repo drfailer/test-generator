@@ -59,26 +59,26 @@ void generateRandomEquationVector(Matrix<T> &matrix, Matrix<T> &result, Matrix<T
 }
 
 template <typename T, typename BT = long>
-void generate(Config const &config) {
+void generate(Config const &config, BT low, BT high) {
   size_t width = config.size.first;
   size_t height = config.size.second;
   Matrix<T> matrix(width, height);
   Matrix<T> triangular(width, height);
+  Matrix<T> result(1, height);
+  Matrix<T> solution(1, height);
   std::ofstream fs(config.filename, std::ios::binary);
 
-  // todo: the boundaries should be configurable
-  generateRandomCholeskyMatrix<T, BT>(matrix, triangular, 0, 10);
+  generateRandomCholeskyMatrix<T, BT>(matrix, triangular, low, high);
   matrix.dump(fs);
-  triangular.dump(fs);
 
   if (config.generator == CholeskyEquation) {
-    Matrix<T> result(1, height);
-    Matrix<T> solution(1, height);
+    generateRandomEquationVector(matrix, result, solution, low, high);
+    result.dump(fs, false);
+  }
 
-    generateRandomEquationVector(matrix, result, solution, 0, 10);
-
-    result.dump(fs);
-    solution.dump(fs);
+  triangular.dump(fs, false);
+  if (config.generator == CholeskyEquation) {
+    solution.dump(fs, false);
   }
 }
 

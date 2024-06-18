@@ -9,7 +9,7 @@ void generate(Config const &config) {
     case CholeskyDecomposableMatrix:
     case CholeskyEquation:
       // todo: boundaries type should be configurable
-      tg::cholesky::generate<double, int>(config);
+      tg::cholesky::generate<double, int>(config, 0, 10);
       break;
   }
 }
